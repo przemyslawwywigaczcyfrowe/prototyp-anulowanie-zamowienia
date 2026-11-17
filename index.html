@@ -106,18 +106,24 @@ header a, footer a { pointer-events:none; }
 .an-lead{font-size:17px;margin:0 0 6px}
 .an-opt{font-weight:400;color:var(--color-neutral-400,#777)}
 .an-sub{margin:0 0 18px;color:var(--color-neutral-500,#555)}
-.an-reasons{border:0;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:4px}
+.an-reasons{border:0;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:9px}
 .an-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.an-r{flex-wrap:wrap}
-.an-r .form-check-label{flex:1;padding:6px 0;line-height:1.35}
-.an-r-extra{flex-basis:100%;padding-left:42px}
-.an-r-extra:empty{display:none}
-.an-hint{margin:4px 0 10px;line-height:1.45}
-.an-hint-akcje{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.an-hint-akcje .button{background-color:#fff}
-.an-hint-akcje .button--primary{background-color:var(--color-button-primary)}
-.an-pole{margin:8px 0 10px;position:relative}
-.an-pole .text-input__field{position:relative}
+/* Kafelek opcji wg RadioListItem z Cyfrowe Design System: kwadratowe rogi, ramka 1px,
+   zaznaczony = turkusowa ramka 2px jako inset box-shadow (bez skoku układu) */
+.an-tile{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;background:var(--color-neutral-primary,#fff);box-shadow:inset 0 0 0 1px var(--color-neutral-200,#d6d6d6);cursor:pointer;transition:box-shadow .2s ease-in}
+.an-tile:hover{box-shadow:inset 0 0 0 1px var(--color-neutral-400,#8f8f8f)}
+.an-tile.is-selected{box-shadow:inset 0 0 0 2px var(--color-secondary,#00b7d1);cursor:default}
+.an-tile-check{flex:none;margin:-6px 0 0 -6px!important;padding:0!important;min-height:0!important}
+.an-tile-body{flex:1;display:flex;flex-direction:column;min-width:0}
+.an-tile-t{font-size:15px;line-height:1.5;color:var(--color-text);cursor:pointer;margin:0;padding-top:1px}
+.an-tile.is-selected .an-tile-t{font-weight:700;color:var(--color-title,#000)}
+.an-r-extra{display:flex;flex-direction:column;gap:12px}
+.an-r-extra:not(:empty){margin-top:9px}
+.an-tile-opis{font-size:14px;line-height:1.5;color:var(--color-text)}
+.an-tile-akcje{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.an-tile-akcje .link{font-size:15px}
+.an-pole{position:relative}
+.an-pole .text-input__field{position:relative;background:#fff}
 .an-uwagi{position:relative}
 .an-uwagi .textarea__field{position:relative}
 .an-uwagi .textarea__input{min-height:90px;resize:vertical;font:inherit}
@@ -18144,8 +18150,8 @@ function otworz(){
  POWODY.forEach(function(p){
   if(p.tylkoOnlineNieoplacone&&(s.oplacone||s.platnosc!=='online'))return;
   var t=(s.salon&&p.tSalon)?p.tSalon:p.t;
-  var d=document.createElement('div');d.className='cyf-form-check form-check an-r';
-  d.innerHTML='<input class="form-check-input" type="radio" name="powod" id="pw-'+p.id+'" value="'+p.id+'"><label class="form-check-label" for="pw-'+p.id+'">'+t+'</label><div class="an-r-extra" id="ex-'+p.id+'"></div>';
+  var d=document.createElement('div');d.className='an-tile';
+  d.innerHTML='<span class="cyf-form-check form-check form-check--secondary an-tile-check"><input class="form-check-input" type="radio" name="powod" id="pw-'+p.id+'" value="'+p.id+'"></span><span class="an-tile-body"><label class="an-tile-t" for="pw-'+p.id+'">'+t+'</label><span class="an-r-extra" id="ex-'+p.id+'"></span></span>';
   fs.appendChild(d);
  });
  $('an-uwagi').value='';
@@ -18164,24 +18170,29 @@ function zamknij(){
 }
 function powodById(id){return POWODY.filter(function(p){return p.id===id;})[0];}
 
+$('an-reasons').addEventListener('click',function(e){
+ var tile=e.target.closest('.an-tile');if(!tile)return;
+ if(e.target.closest('input,a,button,label'))return;
+ var r=tile.querySelector('input[name=powod]');if(!r.checked){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}));}
+});
 $('an-reasons').addEventListener('change',function(e){
  if(e.target.name!=='powod')return;
  [].forEach.call(document.querySelectorAll('.an-r-extra'),function(x){x.innerHTML='';});
- [].forEach.call(document.querySelectorAll('.an-r'),function(r){r.classList.toggle('an-sel',r.contains(e.target));});
+ [].forEach.call(document.querySelectorAll('.an-tile'),function(r){r.classList.toggle('is-selected',r.contains(e.target));});
  var p=powodById(e.target.value),x=$('ex-'+p.id),h='';
  var pm=p.pomoc?p.pomoc(SYT[stan.syt]):null;
  if(pm){
-  var ak='';
-  if(pm.plat)ak+='<button type="button" class="button button--medium button--primary" data-akcja="plat">Ponów płatność</button>';
-  if(pm.kontakt)ak+='<a class="button button--medium button--border-neutral-secondary" href="tel:583264040"><i class="fa-solid fa-phone"></i>&nbsp;58 326 40 40</a><button type="button" class="button button--medium button--border-neutral-secondary" data-akcja="formularz">Formularz kontaktowy</button>';
-  h+='<div class="cyf-alert alert alert--info an-hint"><div class="alert__icon"><i class="fa-solid fa-circle-info"></i></div><div class="alert__content">'+pm.t+'<div class="an-hint-akcje">'+ak+'</div></div></div>';
+  h+='<span class="an-tile-opis">'+pm.t+'</span><span class="an-tile-akcje">';
+  if(pm.plat)h+='<button type="button" class="button button--small button--secondary button--bold" data-akcja="plat">Ponów płatność</button>';
+  if(pm.kontakt)h+='<a class="link link--icon link--bold link--color-title" href="tel:583264040"><i class="fa-solid fa-phone"></i><span>58 326 40 40</span></a><a class="link link--icon link--bold link--color-title" href="#" data-akcja="formularz"><i class="fa-solid fa-envelope"></i><span>Napisz do nas</span></a>';
+  h+='</span>';
  }
- if(p.pole)h+='<div class="text-input an-pole"><div class="text-input__field"><input type="text" id="'+p.pole.id+'" class="text-input__input" maxlength="200" placeholder=" "><label for="'+p.pole.id+'" class="text-input__label">'+p.pole.et+'</label></div></div>';
+ if(p.pole)h+='<span class="text-input an-pole"><span class="text-input__field"><input type="text" id="'+p.pole.id+'" class="text-input__input" maxlength="200" placeholder=" "><label for="'+p.pole.id+'" class="text-input__label">'+p.pole.et+'</label></span></span>';
  x.innerHTML=h;
 });
 document.addEventListener('click',function(e){
  var b=e.target.closest('[data-akcja]');
- if(b){zamknij();toast(b.dataset.akcja==='plat'?'W sklepie ten przycisk otwiera płatność online. Zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktowy z wpisanym numerem zamówienia.');return;}
+ if(b){e.preventDefault();zamknij();toast(b.dataset.akcja==='plat'?'W sklepie ten przycisk otwiera płatność online. Zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktowy z wpisanym numerem zamówienia.');return;}
  if(e.target.closest('[data-zamknij]')){zamknij();return;}
  if(e.target.id==='an-tlo'){zamknij();return;}
  var k=e.target.closest('[data-kontakt]');if(k){e.preventDefault();toast('W sklepie ten link otwiera formularz kontaktowy z numerem zamówienia.');}
