@@ -13,8 +13,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 header a, footer a { pointer-events:none; }
-/* Prototyp anulowania zamówienia, style w przestrzeni an- */
-.an-proto-bar{position:sticky;top:0;z-index:9000;background:#1b1b1b;color:#fff;font:14px/1.4 Lato,Arial,sans-serif}
+/* Prototyp anulowania zamówienia. Okno, pola, przyciski i komunikaty to klasy sklepu
+   (dialog, cyf-form-check, textarea, text-input, cyf-alert, button). Tu tylko układ strony
+   zamówienia odtworzony ze zrzutu i drobne odstępy. Sklep ma body{line-height:1em},
+   dlatego tekst ciągły dostaje własną interlinię. */
+.an-proto-bar{position:sticky;top:0;z-index:1030;background:#1b1b1b;color:#fff;font:14px/1.4 Lato,Arial,sans-serif}
 .an-proto-in{max-width:1440px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
 .an-proto-title{font-weight:700;margin-right:8px}
 .an-proto-lab{color:#ccc}
@@ -22,41 +25,41 @@ header a, footer a { pointer-events:none; }
 .an-proto-btn{font:inherit;background:#00b7d1;color:#fff;border:0;border-radius:4px;padding:6px 12px;cursor:pointer}
 .an-proto-note{color:#aaa;font-size:13px}
 
-.an-page{max-width:1440px;margin:0 auto;padding:16px 16px 48px;font-family:Lato,Arial,sans-serif;color:#222;box-sizing:border-box}
-.an-page *,.an-dialog *{box-sizing:border-box}
-.an-crumbs{font-size:14px;color:#222;margin:4px 0 18px 34px}
+.an-page{max-width:1440px;margin:0 auto;padding:16px 16px 48px;box-sizing:border-box;line-height:1.4}
+.an-page *,.an-panel *{box-sizing:border-box}
+.an-crumbs{font-size:14px;margin:4px 0 18px 34px}
 .an-crumbs .an-sep{color:#aaa;margin:0 8px}.an-crumbs .an-cur{color:#666}
 .an-grid{display:grid;grid-template-columns:300px 1fr;gap:48px;padding:0 34px}
 .an-side-h{font-size:19px;font-weight:700;margin:0 0 18px}
 .an-menu{list-style:none;margin:0;padding:0}
 .an-menu li{display:flex;align-items:center;gap:16px;padding:10px 12px;font-size:15px;color:#444}
-.an-menu li i{width:22px;text-align:center;color:#444;font-size:18px}
+.an-menu li i{width:22px;text-align:center;font-size:18px}
 .an-menu li.an-on{font-weight:700;color:#111}
-.an-h1{font-size:30px;font-weight:700;margin:0 0 4px}
+.an-h1{font-size:30px;font-weight:700;margin:0 0 6px;line-height:1.2}
 .an-date{color:#888;margin:0 0 18px;font-size:15px}
-.an-actions{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;margin-bottom:6px}
-.an-link{display:inline-flex;gap:6px;align-items:center;font:600 15px Lato,Arial,sans-serif;color:#222;background:none;border:0;padding:4px 0;cursor:pointer}
-.an-link u{text-underline-offset:3px}
-.an-cancel{color:#dd0031}
-.an-cancel[aria-disabled="true"]{color:#9a9a9a;cursor:not-allowed}
-.an-cancel:focus-visible,.an-btn:focus-visible,.an-x:focus-visible{outline:3px solid #00b7d1;outline-offset:2px}
-.an-why{margin:6px 0 0;padding:10px 12px;background:#f4f4f4;border-left:3px solid #9a9a9a;font-size:14px;color:#333;max-width:720px}
-.an-why a{color:#dd0031;font-weight:700}
+.an-actions{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;margin-bottom:10px}
+.an-actions .button--icon-text{font-weight:700;cursor:pointer}
+.an-cancel{color:var(--color-button-primary,#dd0031)}
+.an-cancel[aria-disabled="true"]{color:var(--color-neutral-300,#9a9a9a);cursor:not-allowed}
+.an-cancel[aria-disabled="true"]:hover{color:var(--color-neutral-300,#9a9a9a)}
+.an-why{margin:6px 0 0;max-width:760px;line-height:1.45}
+.an-why a{color:inherit;font-weight:700;text-decoration:underline}
+.an-baner{margin:0 0 24px;line-height:1.45;outline:none}
 
-.an-steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);margin:34px 0 40px;padding:0;position:relative}
-.an-steps li{position:relative;font-size:15px;color:#999}
+.an-steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);margin:34px 0 40px;padding:0}
+.an-steps li{position:relative;font-size:15px;color:#999;line-height:1.3}
 .an-steps li::before{content:"";position:absolute;top:13px;left:14px;right:-14px;height:3px;background:#d4d4d4}
 .an-steps li:last-child::before{display:none}
 .an-steps li.an-done::before{background:#4caf50}
-.an-steps .an-ico{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:28px;height:28px;margin-bottom:10px}
+.an-steps .an-ico{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:28px;height:28px;margin-bottom:10px;background:#fff}
 .an-steps .an-ico span{width:12px;height:12px;border-radius:50%;background:#c8c8c8}
 .an-steps .an-cur .an-ico,.an-steps .an-done .an-ico{color:#4caf50;font-size:26px}
 .an-steps .an-cur,.an-steps .an-done{color:#111;font-weight:700}
 .an-steps small{display:block;font-weight:400;color:#888;font-size:13px;margin-top:2px}
 .an-steps.an-x-steps{grid-template-columns:1fr}
 .an-steps.an-x-steps li::before{display:none}
-.an-steps.an-x-steps .an-ico{color:#dd0031;font-size:26px}
-.an-steps.an-x-steps li{color:#dd0031;font-weight:700}
+.an-steps.an-x-steps .an-ico{color:var(--color-button-primary,#dd0031);font-size:26px}
+.an-steps.an-x-steps li{color:var(--color-button-primary,#dd0031);font-weight:700}
 
 .an-boxes{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
 .an-box{border:1px solid #e3e3e3;border-radius:4px}
@@ -67,82 +70,80 @@ header a, footer a { pointer-events:none; }
 .an-salon{display:inline-flex;align-items:center;justify-content:center;width:60px;height:40px;background:#222;color:#fff;border-radius:3px;font-size:20px}
 .an-addr{margin:0;line-height:1.6}
 .an-pay{display:flex;gap:18px;align-items:flex-start}
+.an-pay-t{display:flex;flex-direction:column;gap:4px}
 .an-pay-ico{width:40px;height:40px;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#1e88e5;font-size:18px;flex:none}
-.an-pay strong{font-size:15px}
-.an-pay .an-red{color:#dd0031;font-weight:700}
-.an-pay .an-green{color:#2e7d32;font-weight:700}
-.an-pay .an-grey{color:#666;font-weight:700}
-.an-pay-btn{display:inline-block;margin-top:14px;background:#dd0031;color:#fff;font-weight:700;border:0;border-radius:2px;padding:13px 26px;font-size:17px}
+.an-pay-data{color:#666;margin-left:6px}
+.an-pay-mala{font-size:13px;color:#555}
+.an-red{color:var(--color-error,#dd0031);font-weight:700}
+.an-green{color:#2e7d32;font-weight:700}
+.an-grey{color:#666;font-weight:700}
+.an-pay-btn{margin-top:12px;align-self:flex-start}
 
 .an-prod-h{background:#f1f1f1;padding:10px 24px;font-weight:700;font-size:15px}
 .an-prod{display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:center;padding:16px 0;border-bottom:1px solid #eee}
-.an-mug{width:110px;height:110px;background:#111;border-radius:8px 8px 30px 8px;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center}
+.an-mug{width:110px;height:110px;background:#111;border-radius:8px 8px 30px 8px;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2}
 .an-prod-n{font-size:18px;margin-bottom:8px}
 .an-ok{display:flex;align-items:center;gap:8px;color:#2e7d32}
 .an-dot{width:18px;height:18px;border-radius:50%;background:#4caf50}
-.an-price{font-size:22px;font-weight:400}.an-price sup{font-size:11px}.an-price small{font-size:10px;margin-left:1px}
+.an-price{font-size:22px}.an-price sup{font-size:11px}.an-price small{font-size:10px;margin-left:1px}
 .an-sum{max-width:320px;margin:16px 0 0 auto;font-size:15px}
 .an-sum div{display:flex;justify-content:space-between;padding:4px 0}
 .an-sum .an-sum-t{font-weight:700;border-top:1px solid #ddd;margin-top:6px;padding-top:8px}
 
-.an-baner{border-radius:4px;padding:16px 20px;margin:0 0 22px;font-size:15px;line-height:1.5;outline:none}
-.an-baner.an-b-ok{background:#edf7ee;border:1px solid #4caf50}
-.an-baner.an-b-err{background:#fff4e5;border:1px solid #f0a020}
-.an-baner strong{display:block;font-size:17px;margin-bottom:4px}
-
 .an-verto{margin-top:40px;border:2px dashed #00b7d1;border-radius:6px;padding:16px 20px;font-size:14px;background:#f5fcfd}
 .an-verto h3{margin:0 0 8px;font-size:16px}
 .an-verto table{border-collapse:collapse;width:100%}
-.an-verto td{padding:5px 8px;border-bottom:1px solid #d9eef2;vertical-align:top}
+.an-verto td{padding:6px 8px;border-bottom:1px solid #d9eef2;vertical-align:top}
 .an-verto td:first-child{width:42%;color:#555}
 
-.an-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px}
-.an-overlay[hidden]{display:none}
-.an-dialog{position:relative;background:#fff;border-radius:6px;max-width:600px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:28px 32px;font-family:Lato,Arial,sans-serif;color:#222}
-.an-x{position:absolute;top:12px;right:12px;background:none;border:0;font-size:22px;cursor:pointer;color:#555;width:40px;height:40px}
-.an-krok{color:#888;font-size:13px;margin:0 0 4px}
-.an-d-h{font-size:22px;margin:0 0 6px;font-weight:700;padding-right:30px}
-.an-d-sub{color:#555;margin:0 0 16px;font-size:15px}
-.an-reasons{border:0;margin:0 0 12px;padding:0}
+/* Klasy sklepu (button, cyf-alert) ustawiają display:flex i przykrywają atrybut hidden */
+.an-page [hidden],.an-panel [hidden]{display:none!important}
+
+/* Panel anulowania (dialog sklepu) */
+.an-panel{transition:transform .3s ease-in-out,visibility .3s}
+.an-panel:focus{outline:none}
+.an-tresc{flex:1 1 auto;overflow-y:auto;line-height:1.45}
+.an-lead{font-size:17px;margin:0 0 6px}
+.an-opt{font-weight:400;color:var(--color-neutral-400,#777)}
+.an-sub{margin:0 0 18px;color:var(--color-neutral-500,#555)}
+.an-reasons{border:0;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:4px}
 .an-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.an-r{display:flex;gap:12px;align-items:flex-start;padding:11px 12px;border:1px solid #e1e1e1;border-radius:4px;margin-bottom:8px;cursor:pointer;font-size:15px}
-.an-r:hover{border-color:#999}
-.an-r input{margin-top:3px;accent-color:#dd0031;width:18px;height:18px;flex:none}
-.an-r.an-sel{border-color:#dd0031;background:#fff6f8}
-.an-hint{margin:-2px 0 12px;padding:12px 14px;background:#eefafc;border:1px solid #b8e8ef;border-radius:4px;font-size:14px;line-height:1.5}
-.an-hint .an-hint-btn{margin-top:8px;display:inline-block;background:#00b7d1;color:#fff;border:0;border-radius:3px;padding:8px 14px;font:700 14px Lato,Arial,sans-serif;cursor:pointer}
-.an-lab{display:block;font-weight:700;font-size:14px;margin:10px 0 6px}
-.an-opt{font-weight:400;color:#888}
-.an-dialog input[type=text],.an-dialog textarea{width:100%;font:15px Lato,Arial,sans-serif;padding:9px 10px;border:1px solid #bbb;border-radius:3px}
-.an-err{color:#dd0031;font-weight:700;margin:8px 0 0;font-size:14px}
-.an-d-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
-.an-btn{font:700 16px Lato,Arial,sans-serif;border-radius:2px;padding:12px 22px;cursor:pointer}
-.an-btn-red{background:#dd0031;color:#fff;border:1px solid #dd0031}
-.an-btn-out{background:#fff;color:#222;border:1px solid #222}
-.an-btn[disabled]{opacity:.6;cursor:wait}
-.an-skutki{margin:10px 0 14px;padding-left:20px;font-size:15px;line-height:1.55}
-.an-skutki li{margin-bottom:6px}
-.an-powod-pod{font-size:14px;color:#555}
-.an-zmien{background:none;border:0;color:#dd0031;text-decoration:underline;cursor:pointer;font:inherit;padding:0}
-.an-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 18px;border-radius:4px;z-index:9600;font:15px Lato,Arial,sans-serif}
+.an-r{flex-wrap:wrap}
+.an-r .form-check-label{flex:1;padding:6px 0;line-height:1.35}
+.an-r-extra{flex-basis:100%;padding-left:42px}
+.an-r-extra:empty{display:none}
+.an-hint{margin:4px 0 10px;line-height:1.45}
+.an-hint-btn{margin-top:10px}
+.an-pole{margin:8px 0 10px;position:relative}
+.an-pole .text-input__field{position:relative}
+.an-uwagi{position:relative}
+.an-uwagi .textarea__field{position:relative}
+.an-uwagi .textarea__input{min-height:90px;resize:vertical;font:inherit}
+.an-skutki{margin:6px 0 22px;padding-left:20px;font-size:15px;list-style:disc}
+.an-skutki li{margin-bottom:10px}
+.an-powod-box{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;padding:14px 16px;background:var(--color-neutral-50,#f5f5f5)}
+.an-powod-et{flex-basis:100%;font-size:13px;color:var(--color-neutral-400,#777)}
+.an-zmien{margin-left:auto}
+.an-stopka{justify-content:flex-end}
+.an-stopka .button{flex:0 0 auto}
+
+.an-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 18px;border-radius:4px;z-index:2000;font:15px/1.4 Lato,Arial,sans-serif;max-width:calc(100% - 32px)}
 
 @media (max-width:1023px){
   .an-grid{grid-template-columns:1fr;gap:16px;padding:0}
   .an-side{display:none}
   .an-crumbs{margin-left:0}
   .an-boxes{grid-template-columns:1fr}
-  .an-steps{font-size:13px}
   .an-h1{font-size:24px}
-  .an-prod{grid-template-columns:70px 1fr;}
+  .an-prod{grid-template-columns:70px 1fr}
   .an-mug{width:70px;height:70px;font-size:7px}
   .an-price{grid-column:2}
 }
 @media (max-width:600px){
   .an-steps li{font-size:12px}
   .an-steps small{display:none}
-  .an-dialog{padding:22px 18px;border-radius:0;max-height:100vh}
-  .an-overlay{padding:0;align-items:stretch}
-  .an-d-btns .an-btn{width:100%}
+  .an-stopka{flex-direction:column-reverse;align-items:stretch}
+  .an-stopka .button{width:100%}
 }
 
 </style>
@@ -151,7 +152,7 @@ header a, footer a { pointer-events:none; }
 <div class="an-proto-bar" role="region" aria-label="Ustawienia prototypu">
   <div class="an-proto-in">
     <strong class="an-proto-title">Prototyp: anulowanie zamówienia w Moim koncie</strong>
-    <label class="an-proto-lab" for="an-sytuacja">Sytuacja zamówienia:</label>
+    <label class="an-proto-lab" for="an-sytuacja">Stan zamówienia:</label>
     <select id="an-sytuacja">
       <option value="nowe">Nowe, czeka na wpłatę (płatność online)</option>
       <option value="oplacone">Opłacone, w przygotowaniu</option>
@@ -162,7 +163,7 @@ header a, footer a { pointer-events:none; }
       <option value="wyslane">Wysłane</option>
       <option value="raty">Na raty, wniosek w banku</option>
     </select>
-    <button type="button" class="an-proto-btn" id="an-od-nowa">Zacznij od nowa</button>
+    <button type="button" class="an-proto-btn" id="an-od-nowa">Zacznij od początku</button>
     <span class="an-proto-note">Nic nie trafia do sklepu ani do Verto.</span>
   </div>
 </div>
@@ -17075,7 +17076,7 @@ header a, footer a { pointer-events:none; }
 </header>
 <main>
 <div class="an-page">
-  <nav class="an-crumbs" aria-label="Okruszki">
+  <nav class="an-crumbs" aria-label="Ścieżka">
     <span>Cyfrowe.pl</span><span class="an-sep">/</span><span>Moje konto</span><span class="an-sep">/</span><span>Zamówienia</span><span class="an-sep">/</span><span class="an-cur">Nr 1338454</span>
   </nav>
 
@@ -17096,20 +17097,26 @@ header a, footer a { pointer-events:none; }
     </aside>
 
     <section class="an-main">
-      <div id="an-baner" class="an-baner" hidden tabindex="-1"></div>
+      <div id="an-baner" class="cyf-alert alert an-baner" hidden tabindex="-1">
+        <div class="alert__icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="alert__content" id="an-baner-tresc"></div>
+      </div>
 
       <h1 class="an-h1">Zamówienie nr 1338454</h1>
       <p class="an-date">Złożono: WT | 17.11.2026 | 14:52</p>
 
       <div class="an-actions">
-        <span class="an-link" id="an-l-zwrot"><i class="fa-solid fa-arrow-up-from-bracket"></i><u>Zwrot</u></span>
-        <span class="an-link" id="an-l-rekl"><i class="fa-solid fa-shield-halved"></i><u>Reklamacja</u></span>
-        <span class="an-link"><i class="fa-solid fa-wrench"></i><u>Serwis pogwarancyjny</u></span>
-        <button type="button" class="an-link an-cancel" id="an-anuluj" aria-describedby="an-why">
-          <i class="fa-solid fa-ban"></i><u>Anuluj zamówienie</u>
+        <span class="button button--icon-text" id="an-l-zwrot"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>Zwrot</span></span>
+        <span class="button button--icon-text" id="an-l-rekl"><i class="fa-solid fa-shield-halved"></i><span>Reklamacja</span></span>
+        <span class="button button--icon-text"><i class="fa-solid fa-wrench"></i><span>Serwis pogwarancyjny</span></span>
+        <button type="button" class="button button--icon-text an-cancel" id="an-anuluj" aria-describedby="an-why-tresc">
+          <i class="fa-solid fa-circle-xmark"></i><span>Anuluj zamówienie</span>
         </button>
       </div>
-      <p class="an-why" id="an-why" hidden></p>
+      <div class="cyf-alert alert alert--info an-why" id="an-why" hidden tabindex="-1">
+        <div class="alert__icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="alert__content" id="an-why-tresc"></div>
+      </div>
 
       <ol class="an-steps" id="an-steps"></ol>
 
@@ -17117,8 +17124,8 @@ header a, footer a { pointer-events:none; }
         <div class="an-box">
           <div class="an-box-h">Dostawa</div>
           <div class="an-box-b">
-            <div class="an-carrier" id="an-carrier"><span class="an-dpd">dpd</span><span>Kurier DPD</span></div>
-            <p class="an-addr" id="an-addr"><strong>Jan Przykładowy</strong><br>ul. Przykładowa 1 / 2<br>00-001 Warszawa<br>500 000 000</p>
+            <div class="an-carrier" id="an-carrier"></div>
+            <p class="an-addr" id="an-addr"></p>
           </div>
         </div>
         <div class="an-box">
@@ -17147,40 +17154,49 @@ header a, footer a { pointer-events:none; }
   </div>
 </div>
 
-<!-- Okno anulowania -->
-<div class="an-overlay" id="an-overlay" hidden>
-  <div class="an-dialog" role="dialog" aria-modal="true" aria-labelledby="an-d-h">
-    <button type="button" class="an-x" id="an-zamknij" aria-label="Zamknij okno"><i class="fa-solid fa-xmark"></i></button>
+<!-- Panel anulowania: ten sam element co panel logowania w sklepie (dialog wysuwany z prawej) -->
+<div class="offcanvas offcanvas-end dialog dialog--medium dialog--right an-panel" id="an-panel" role="dialog" aria-modal="true" aria-labelledby="an-panel-tytul" tabindex="-1">
+  <div class="dialog__header">
+    <button type="button" class="button button--small button--color-text button--icon button--circle dialog__close button--neutral-hover" data-zamknij aria-label="Zamknij">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="dialog__title title" id="an-panel-tytul">Anulowanie zamówienia nr 1338454</div>
+  </div>
 
-    <form id="an-krok1" novalidate>
-      <p class="an-krok">Krok 1 z 2</p>
-      <h2 class="an-d-h" id="an-d-h">Dlaczego chcesz anulować zamówienie?</h2>
-      <p class="an-d-sub">Odpowiedź jest nieobowiązkowa, ale pomoże nam poprawić sklep. Możesz od razu kliknąć „Dalej”.</p>
-      <fieldset class="an-reasons" id="an-reasons">
-        <legend class="an-sr">Powód anulowania</legend>
-      </fieldset>
-      <div id="an-extra"></div>
-      <label class="an-lab" for="an-uwagi">Chcesz coś dodać? <span class="an-opt">(nieobowiązkowe)</span></label>
-      <textarea id="an-uwagi" rows="2" maxlength="500" placeholder="Na przykład co sprawiło, że zmieniasz decyzję"></textarea>
-      <p class="an-err" id="an-err1" role="alert" hidden></p>
-      <div class="an-d-btns">
-        <button type="submit" class="an-btn an-btn-red">Dalej</button>
-        <button type="button" class="an-btn an-btn-out" data-zamknij>Nie anuluję</button>
-      </div>
-    </form>
-
-    <div id="an-krok2" hidden>
-      <p class="an-krok">Krok 2 z 2</p>
-      <h2 class="an-d-h">Czy na pewno anulować całe zamówienie nr 1338454?</h2>
-      <ul class="an-skutki" id="an-skutki"></ul>
-      <p class="an-powod-pod">Twój powód: <strong id="an-powod-txt"></strong> <button type="button" class="an-zmien" id="an-zmien">zmień</button></p>
-      <div class="an-d-btns">
-        <button type="button" class="an-btn an-btn-red" id="an-potwierdz">Tak, anuluj zamówienie</button>
-        <button type="button" class="an-btn an-btn-out" data-zamknij>Nie, zostawiam zamówienie</button>
+  <!-- Krok 1: powód -->
+  <div class="dialog__content an-tresc" id="an-krok1">
+    <p class="an-lead"><strong>Powód anulowania</strong> <span class="an-opt">(opcjonalnie)</span></p>
+    <p class="an-sub">Jeśli podasz powód, łatwiej nam będzie poprawić sklep.</p>
+    <fieldset class="an-reasons" id="an-reasons">
+      <legend class="an-sr">Powód anulowania</legend>
+    </fieldset>
+    <div id="an-extra"></div>
+    <div class="textarea an-uwagi">
+      <div class="textarea__field">
+        <textarea id="an-uwagi" class="textarea__input" maxlength="500" placeholder=" "></textarea>
+        <label for="an-uwagi" class="textarea__label">Dodatkowe uwagi (opcjonalnie)</label>
       </div>
     </div>
   </div>
+
+  <!-- Krok 2: potwierdzenie -->
+  <div class="dialog__content an-tresc" id="an-krok2" hidden>
+    <p class="an-lead"><strong>Sprawdź, zanim anulujesz</strong></p>
+    <ul class="an-skutki" id="an-skutki"></ul>
+    <div class="an-powod-box">
+      <span class="an-powod-et">Powód anulowania</span>
+      <span id="an-powod-txt"></span>
+      <button type="button" class="button button--icon-text an-zmien" id="an-zmien"><span>Zmień</span></button>
+    </div>
+  </div>
+
+  <div class="dialog__footer dialog__footer--list dialog__footer--gap an-stopka">
+    <button type="button" class="button button--large button--border-neutral-secondary" data-zamknij id="an-wroc">Wróć do zamówienia</button>
+    <button type="button" class="button button--large button--primary" id="an-dalej">Dalej</button>
+    <button type="button" class="button button--large button--primary" id="an-potwierdz" hidden>Anuluj zamówienie</button>
+  </div>
 </div>
+<div class="offcanvas-backdrop fade" id="an-tlo" hidden></div>
 
 <div class="an-toast" id="an-toast" role="status" hidden></div>
 
@@ -17984,38 +18000,39 @@ var $=function(id){return document.getElementById(id);};
 var KROKI=['Nowe','W przygotowaniu','W drodze','Odebrane'];
 
 var POWODY=[
- {id:'cena',t:'W innym sklepie jest taniej',verto:'# Lepsza cena / dostępność w innym sklepie',extra:'cena'},
- {id:'termin',t:'Czas dostawy jest dla mnie za długi',verto:'# Zbyt długi termin realizacji'},
- {id:'platnosc',t:'Płatność online się nie udała',verto:'# Błąd płatności - Zdublowane / połączone z innym zamówieniem',tylkoNieoplacone:true,
-   hint:'Nie musisz anulować zamówienia, żeby zapłacić jeszcze raz. Zamknij to okno i kliknij „Ponów płatność”. Możesz tam wybrać inną metodę płatności.',hintBtn:'Wolę ponowić płatność'},
- {id:'zmiana',t:'Chcę zmienić produkty albo ich liczbę',verto:'# Klient zrezygnował z zakupu',
-   hint:'Anuluj to zamówienie i złóż nowe z właściwymi produktami. Produktów w zamówieniu nie da się zmienić na stronie.'},
- {id:'dostawa',t:'Chcę zmienić adres albo sposób dostawy',verto:'# Klient zrezygnował z zakupu',
-   hint:'Adres i sposób dostawy możemy zmienić bez anulowania, dopóki zamówienie nie jest spakowane. Napisz do nas, podając numer zamówienia.',hintBtn:'Napiszę do was'},
- {id:'dubel',t:'Zamówienie złożone przez pomyłkę albo drugi raz',verto:'# Zdublowane / połączone z innym zamówieniem'},
- {id:'rozmysl',t:'Zmiana decyzji, produkt nie jest już potrzebny',verto:'# Klient zrezygnował z zakupu'},
- {id:'inny',t:'Inny powód',verto:'# Klient zrezygnował z zakupu',extra:'inny'}
+ {id:'cena',t:'W innym sklepie jest taniej',verto:'# Lepsza cena / dostępność w innym sklepie',pole:{id:'an-gdzie',et:'Gdzie jest taniej? (opcjonalnie)'}},
+ {id:'termin',t:'Za długi czas dostawy',verto:'# Zbyt długi termin realizacji'},
+ {id:'platnosc',t:'Nie udała się płatność online',verto:'# Błąd płatności - Zdublowane / połączone z innym zamówieniem',tylkoOnlineNieoplacone:true,
+   hint:'Nie musisz anulować zamówienia, żeby zapłacić jeszcze raz. Możesz ponowić płatność, także inną metodą.',hintBtn:'Ponów płatność'},
+ {id:'zmiana',t:'Chcę zmienić produkty lub ich liczbę',verto:'# Klient zrezygnował z zakupu',
+   hint:'Produktów w złożonym zamówieniu nie da się zmienić. Anuluj to zamówienie i złóż nowe.'},
+ {id:'dostawa',t:'Chcę zmienić adres lub sposób dostawy',tSalon:'Chcę zmienić salon odbioru lub sposób dostawy',verto:'# Klient zrezygnował z zakupu',
+   hint:'Adres i sposób dostawy zmienimy bez anulowania, dopóki zamówienie nie jest spakowane. Napisz do nas i podaj numer zamówienia.',hintBtn:'Napisz do nas'},
+ {id:'dubel',t:'Zamówienie złożone przez pomyłkę lub dwa razy',verto:'# Zdublowane / połączone z innym zamówieniem'},
+ {id:'rozmysl',t:'Produkt nie jest mi już potrzebny',verto:'# Klient zrezygnował z zakupu'},
+ {id:'inny',t:'Inny powód',verto:'# Klient zrezygnował z zakupu',pole:{id:'an-inny',et:'Napisz, jaki (opcjonalnie)'}}
 ];
-
 var BEZ={id:'brak',t:'nie podano',verto:'- Klient nie chciał podać powodu anulowania'};
+
 var SYT={
  nowe:{krok:0,mozna:true,oplacone:false,platnosc:'online'},
  oplacone:{krok:1,mozna:true,oplacone:true,platnosc:'online'},
- kompletacja:{krok:1,mozna:true,oplacone:true,platnosc:'online',verto:'W trakcie kompletacji',magazyn:true},
+ kompletacja:{krok:1,mozna:true,oplacone:true,platnosc:'online',magazyn:true},
  salon:{krok:0,mozna:true,oplacone:false,platnosc:'salon',salon:true},
  wyscig:{krok:1,mozna:true,oplacone:true,platnosc:'online',wyscig:true},
  kurier:{krok:1,mozna:false,oplacone:true,platnosc:'online',
-   why:'Nie można już anulować zamówienia, bo jest spakowane i czeka na kuriera. Jeśli nie chcesz go przyjąć, <a href="#" data-kontakt>napisz do nas</a>, podając numer zamówienia. Po odebraniu paczki możesz też zwrócić produkty w ciągu 14 dni.'},
+   why:'Tego zamówienia nie można już anulować, bo jest spakowane i czeka na kuriera. Jeśli nie chcesz go przyjąć, <a href="#" data-kontakt>napisz do nas</a> i podaj numer zamówienia. Po odebraniu paczki możesz też zwrócić produkty w ciągu 14 dni.'},
  wyslane:{krok:2,mozna:false,oplacone:true,platnosc:'online',
-   why:'Nie można już anulować zamówienia, bo jest w drodze. Po odebraniu paczki możesz zwrócić produkty w ciągu 14 dni przyciskiem „Zwrot”.'},
+   why:'Tego zamówienia nie można już anulować, bo jest w drodze. Po odebraniu paczki możesz zwrócić produkty w ciągu 14 dni. Wybierz wtedy „Zwrot”.'},
  raty:{krok:0,mozna:false,oplacone:false,platnosc:'raty',
-   why:'Zamówienie na raty anulujemy razem z bankiem, żeby nie uruchomił kredytu. <a href="#" data-kontakt>Napisz do nas</a>, podając numer zamówienia, a zamkniemy wniosek i zamówienie.'}
+   why:'Zamówienie na raty anulujemy razem z bankiem, żeby bank nie uruchomił kredytu. <a href="#" data-kontakt>Napisz do nas</a> i podaj numer zamówienia, a zamkniemy wniosek i zamówienie.'}
 };
 
 var stan={syt:'nowe',anulowane:false,powod:null,szczegol:'',uwagi:'',kiedy:''};
 var ostatniFokus=null;
 
 function teraz(){var d=new Date();function p(n){return (n<10?'0':'')+n;}return 'WT | 17.11.2026 | '+p(d.getHours())+':'+p(d.getMinutes());}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
 function rysujKroki(){
  var ol=$('an-steps');ol.innerHTML='';
@@ -18030,29 +18047,14 @@ function rysujKroki(){
   var li=document.createElement('li');
   if(i<s.krok)li.className='an-done';
   if(i===s.krok)li.className='an-cur';
-  var ico=i<=s.krok?'<i class="fa-solid '+(i===0?'fa-bag-shopping':i===1?'fa-box':i===2?'fa-truck':'fa-house')+'"></i>':'<span></span>';
+  var ico=i<=s.krok?'<i class="fa-solid '+['fa-bag-shopping','fa-box','fa-truck','fa-house'][i]+'"></i>':'<span></span>';
   li.innerHTML='<div class="an-ico">'+ico+'</div>'+k+(i<=s.krok?'<small>WT | 17.11.2026 | '+(14+i)+':52</small>':'');
   ol.appendChild(li);
  });
 }
 
-function rysujPlatnosc(){
- var s=SYT[stan.syt],b=$('an-platnosc'),h='';
- if(s.platnosc==='salon'){
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-store"></i></div><div>Płatność przy odbiorze w salonie<br><strong>50,00 zł</strong><br>'+
-    (stan.anulowane?'<span class="an-grey">Zamówienie anulowane, nic nie płacisz</span>':'<span class="an-grey">Zapłacisz przy odbiorze</span>')+'</div></div>';
- }else if(s.platnosc==='raty'){
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-building-columns"></i></div><div>Raty Credit Agricole<br><strong>50,00 zł</strong> 17.11.2026 | 14:53<br><span class="an-red"><i class="fa-solid fa-circle-exclamation"></i> Wniosek czeka na decyzję banku</span></div></div>';
- }else if(stan.anulowane&&s.oplacone){
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-rotate-left"></i></div><div>Płatność online<br><strong>50,00 zł</strong> 17.11.2026 | 14:53<br><span class="an-green"><i class="fa-solid fa-circle-check"></i> Zwrot 50,00 zł w przygotowaniu</span><br><small>Pieniądze wrócą na konto, z którego zapłacono, najpóźniej w ciągu 14 dni.</small></div></div>';
- }else if(stan.anulowane){
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-ban"></i></div><div>Płatność online<br><strong>50,00 zł</strong><br><span class="an-grey">Zamówienie anulowane, nic nie płacisz</span></div></div>';
- }else if(s.oplacone){
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-bookmark"></i></div><div>Płatność online<br><strong>50,00 zł</strong> 17.11.2026 | 14:53<br><span class="an-green"><i class="fa-solid fa-circle-check"></i> Opłacone</span></div></div>';
- }else{
-  h='<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid fa-bookmark"></i></div><div>Płatność online<br><strong>50,00 zł</strong> 17.11.2026 | 14:53<br><span class="an-red"><i class="fa-solid fa-circle-exclamation"></i> Czekamy na wpłatę</span><br><span class="an-pay-btn">Ponów płatność</span></div></div>';
- }
- b.innerHTML=h;
+function rysujDostawe(){
+ var s=SYT[stan.syt];
  if(s.salon){
   $('an-carrier').innerHTML='<span class="an-salon"><i class="fa-solid fa-store"></i></span><span>Odbiór w salonie</span>';
   $('an-addr').innerHTML='<strong>Salon cyfrowe.pl</strong><br>ul. Przykładowa 10<br>00-001 Warszawa';
@@ -18062,145 +18064,170 @@ function rysujPlatnosc(){
  }
 }
 
+function plat(ico,nazwa,data,status,klasa,extra){
+ return '<div class="an-pay"><div class="an-pay-ico"><i class="fa-solid '+ico+'"></i></div><div class="an-pay-t"><div>'+nazwa+'</div><div><strong>50,00 zł</strong>'+(data?' <span class="an-pay-data">'+data+'</span>':'')+'</div><div class="'+klasa+'">'+status+'</div>'+(extra||'')+'</div></div>';
+}
+function rysujPlatnosc(){
+ var s=SYT[stan.syt],h,d='17.11.2026 | 14:53';
+ if(s.platnosc==='salon'){
+  h=plat('fa-store','Płatność przy odbiorze w salonie','',stan.anulowane?'Zamówienie anulowane, nic nie płacisz':'Zapłacisz przy odbiorze','an-grey');
+ }else if(s.platnosc==='raty'){
+  h=plat('fa-building-columns','Raty Credit Agricole',d,'<i class="fa-solid fa-circle-exclamation"></i> Wniosek czeka na decyzję banku','an-red');
+ }else if(stan.anulowane&&s.oplacone){
+  h=plat('fa-rotate-left','Płatność online',d,'<i class="fa-solid fa-circle-check"></i> Zwrot 50,00 zł w przygotowaniu','an-green','<div class="an-pay-mala">Pieniądze wrócą na konto, z którego zapłacono, najpóźniej w ciągu 14 dni.</div>');
+ }else if(stan.anulowane){
+  h=plat('fa-ban','Płatność online','','Zamówienie anulowane, nic nie płacisz','an-grey');
+ }else if(s.oplacone){
+  h=plat('fa-bookmark','Płatność online',d,'<i class="fa-solid fa-circle-check"></i> Opłacone','an-green');
+ }else{
+  h=plat('fa-bookmark','Płatność online',d,'<i class="fa-solid fa-circle-exclamation"></i> Czekamy na wpłatę','an-red','<span class="button button--large button--primary an-pay-btn">Ponów płatność</span>');
+ }
+ $('an-platnosc').innerHTML=h;
+}
+
 function rysujPrzycisk(){
  var s=SYT[stan.syt],btn=$('an-anuluj'),why=$('an-why');
- $('an-l-zwrot').style.display=stan.anulowane?'none':'';$('an-l-rekl').style.display=stan.anulowane?'none':'';
+ $('an-l-zwrot').style.display=stan.anulowane?'none':'';
+ $('an-l-rekl').style.display=stan.anulowane?'none':'';
  if(stan.anulowane){btn.hidden=true;why.hidden=true;return;}
  btn.hidden=false;
- if(s.mozna){btn.removeAttribute('aria-disabled');why.hidden=true;why.innerHTML='';btn.title='';}
- else{btn.setAttribute('aria-disabled','true');why.innerHTML='<i class="fa-solid fa-circle-info"></i> '+s.why;why.hidden=false;btn.title='Anulowanie jest już niedostępne';}
- var po=stan.anulowane;
- $('an-l-zwrot').style.display=po?'none':'';$('an-l-rekl').style.display=po?'none':'';
+ if(s.mozna){btn.removeAttribute('aria-disabled');why.hidden=true;$('an-why-tresc').innerHTML='';}
+ else{btn.setAttribute('aria-disabled','true');$('an-why-tresc').innerHTML=s.why;why.hidden=false;}
 }
 
 function rysujVerto(){
  var v=$('an-verto');
  if(!stan.anulowane){v.hidden=true;return;}
  var s=SYT[stan.syt],p=stan.powod;
- var kom='Anulowane przez klienta w Moim koncie. Powód: '+p.t+(stan.szczegol?'. Szczegóły: '+esc(stan.szczegol):'')+(stan.uwagi?'. Uwagi: '+esc(stan.uwagi):'');
- var wiersze=[
+ var kom='Anulowane przez klienta w Moim koncie. Powód: '+p.t+(stan.szczegol?'. Szczegóły: '+stan.szczegol:'')+(stan.uwagi?'. Uwagi: '+stan.uwagi:'');
+ var w=[
   ['Stan dokumentu zamówienia','Anulowane'],
   ['Powód przeniesienia zamówienia do archiwum',p.verto],
   ['Nowa cecha: anulował klient na stronie','tak, '+stan.kiedy],
   ['Nowa cecha: powód podany przez klienta',esc(kom)],
   ['Rezerwacja towaru','zwolniona, towar wraca do sprzedaży'],
-  ['Wpłata do zwrotu',s.oplacone?'50,00 zł, zwrot na konto, z którego zapłacono, w ciągu 14 dni':'brak, zamówienie nie było opłacone']
+  ['Wpłata do zwrotu',s.oplacone?'50,00 zł, na konto, z którego zapłacono, w ciągu 14 dni':'brak, zamówienie nie było opłacone']
  ];
- if(s.magazyn)wiersze.push(['Magazyn','zamówienie było w kompletacji: Verto pokazuje magazynowi, że ma przerwać pakowanie i odłożyć towar']);
- v.innerHTML='<h3><i class="fa-solid fa-database"></i> Co dostaje Verto (tego klient nie widzi)</h3><table>'+wiersze.map(function(w){return '<tr><td>'+w[0]+'</td><td>'+w[1]+'</td></tr>';}).join('')+'</table>';
+ if(s.magazyn)w.push(['Magazyn','zamówienie było w kompletacji: magazyn widzi stan „Anulowane”, przerywa pakowanie i odkłada towar']);
+ v.innerHTML='<h3><i class="fa-solid fa-database"></i> Co dostaje Verto (tego klient nie widzi)</h3><table>'+w.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';}).join('')+'</table>';
  v.hidden=false;
 }
 
-function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function rysuj(){rysujKroki();rysujDostawe();rysujPlatnosc();rysujPrzycisk();rysujVerto();}
 
-function rysuj(){rysujKroki();rysujPlatnosc();rysujPrzycisk();rysujVerto();}
+function baner(typ,ikona,html){
+ var b=$('an-baner');b.className='cyf-alert alert an-baner '+typ;
+ b.querySelector('.alert__icon').innerHTML='<i class="fa-solid '+ikona+'"></i>';
+ $('an-baner-tresc').innerHTML=html;b.hidden=false;b.focus();window.scrollTo({top:0,behavior:'smooth'});
+}
 
-function pokazBaner(typ,html){var b=$('an-baner');b.className='an-baner '+typ;b.innerHTML=html;b.hidden=false;b.focus();window.scrollTo({top:0,behavior:'smooth'});}
-
-/* okno */
+/* panel */
+function pokazKrok(n){
+ $('an-krok1').hidden=n!==1;$('an-krok2').hidden=n!==2;
+ $('an-dalej').hidden=n!==1;$('an-potwierdz').hidden=n!==2;
+ $('an-wroc').textContent='Wróć do zamówienia';
+}
 function otworz(){
  var s=SYT[stan.syt];
- if(!s.mozna||stan.anulowane){return;}
+ if(!s.mozna||stan.anulowane)return;
  ostatniFokus=document.activeElement;
  var fs=$('an-reasons');fs.innerHTML='<legend class="an-sr">Powód anulowania</legend>';
  POWODY.forEach(function(p){
-  if(p.tylkoNieoplacone&&(s.oplacone||s.platnosc!=='online'))return;
-  if(p.id==='dostawa'&&s.salon)p=Object.assign({},p,{t:'Chcę zmienić salon odbioru albo sposób dostawy'});
-  var l=document.createElement('label');l.className='an-r';
-  l.innerHTML='<input type="radio" name="powod" value="'+p.id+'"><span>'+p.t+'</span>';
-  fs.appendChild(l);
+  if(p.tylkoOnlineNieoplacone&&(s.oplacone||s.platnosc!=='online'))return;
+  var t=(s.salon&&p.tSalon)?p.tSalon:p.t;
+  var d=document.createElement('div');d.className='cyf-form-check form-check an-r';
+  d.innerHTML='<input class="form-check-input" type="radio" name="powod" id="pw-'+p.id+'" value="'+p.id+'"><label class="form-check-label" for="pw-'+p.id+'">'+t+'</label><div class="an-r-extra" id="ex-'+p.id+'"></div>';
+  fs.appendChild(d);
  });
- $('an-extra').innerHTML='';$('an-uwagi').value='';$('an-err1').hidden=true;
- $('an-krok1').hidden=false;$('an-krok2').hidden=true;
- $('an-overlay').hidden=false;
+ $('an-uwagi').value='';
+ pokazKrok(1);
+ $('an-tlo').hidden=false;
+ var panel=$('an-panel');
+ void panel.offsetWidth;$('an-tlo').classList.add('show');panel.classList.add('show');
  document.body.style.overflow='hidden';
- setTimeout(function(){var f=fs.querySelector('input');f&&f.focus();},30);
+ setTimeout(function(){panel.focus();},50);
 }
 function zamknij(){
- $('an-overlay').hidden=true;document.body.style.overflow='';
- ostatniFokus&&ostatniFokus.focus&&ostatniFokus.focus();
+ $('an-panel').classList.remove('show');$('an-tlo').classList.remove('show');
+ setTimeout(function(){$('an-tlo').hidden=true;},200);
+ document.body.style.overflow='';
+ if(ostatniFokus&&ostatniFokus.focus)ostatniFokus.focus();
 }
 function powodById(id){return POWODY.filter(function(p){return p.id===id;})[0];}
 
 $('an-reasons').addEventListener('change',function(e){
  if(e.target.name!=='powod')return;
- [].forEach.call(document.querySelectorAll('.an-r'),function(l){l.classList.toggle('an-sel',l.contains(e.target));});
- var p=powodById(e.target.value),x=$('an-extra'),h='';
- if(p.hint){h+='<div class="an-hint"><i class="fa-solid fa-lightbulb"></i> '+p.hint+(p.hintBtn?'<br><button type="button" class="an-hint-btn" data-hint="'+p.id+'">'+p.hintBtn+'</button>':'')+'</div>';}
- if(p.extra==='cena')h+='<label class="an-lab" for="an-gdzie">Gdzie jest taniej? <span class="an-opt">(nieobowiązkowe)</span></label><input type="text" id="an-gdzie" maxlength="200" placeholder="Nazwa sklepu albo link i cena">';
- if(p.extra==='inny')h+='<label class="an-lab" for="an-inny">Napisz krótko, dlaczego anulujesz</label><input type="text" id="an-inny" maxlength="300">';
- x.innerHTML=h;$('an-err1').hidden=true;
+ [].forEach.call(document.querySelectorAll('.an-r-extra'),function(x){x.innerHTML='';});
+ [].forEach.call(document.querySelectorAll('.an-r'),function(r){r.classList.toggle('an-sel',r.contains(e.target));});
+ var p=powodById(e.target.value),x=$('ex-'+p.id),h='';
+ if(p.hint)h+='<div class="cyf-alert alert alert--info an-hint"><div class="alert__icon"><i class="fa-solid fa-circle-info"></i></div><div class="alert__content">'+p.hint+(p.hintBtn?'<div><button type="button" class="button button--medium button--border-neutral-secondary an-hint-btn" data-hint="'+p.id+'">'+p.hintBtn+'</button></div>':'')+'</div></div>';
+ if(p.pole)h+='<div class="text-input an-pole"><div class="text-input__field"><input type="text" id="'+p.pole.id+'" class="text-input__input" maxlength="200" placeholder=" "><label for="'+p.pole.id+'" class="text-input__label">'+p.pole.et+'</label></div></div>';
+ x.innerHTML=h;
 });
-$('an-extra').addEventListener('click',function(e){
- var b=e.target.closest('[data-hint]');if(!b)return;
- zamknij();
- toast(b.dataset.hint==='platnosc'?'W sklepie ten przycisk otwiera płatność online, a zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktu z numerem zamówienia.');
+document.addEventListener('click',function(e){
+ var b=e.target.closest('[data-hint]');
+ if(b){zamknij();toast(b.dataset.hint==='platnosc'?'W sklepie ten przycisk otwiera płatność online. Zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktowy z numerem zamówienia.');return;}
+ if(e.target.closest('[data-zamknij]')){zamknij();return;}
+ if(e.target.id==='an-tlo'){zamknij();return;}
+ var k=e.target.closest('[data-kontakt]');if(k){e.preventDefault();toast('W sklepie ten link otwiera formularz kontaktowy z numerem zamówienia.');}
 });
 
-$('an-krok1').addEventListener('submit',function(e){
- e.preventDefault();
- var r=document.querySelector('input[name=powod]:checked'),err=$('an-err1');
- var p=r?powodById(r.value):BEZ;
- var szcz='';
- if(p.extra==='inny'){szcz=($('an-inny').value||'').trim();}
- if(p.extra==='cena'){szcz=($('an-gdzie').value||'').trim();}
+$('an-dalej').addEventListener('click',function(){
+ var r=document.querySelector('input[name=powod]:checked');
+ var p=r?powodById(r.value):BEZ,szcz='';
+ if(p.pole){var el=$(p.pole.id);szcz=el?(el.value||'').trim():'';}
  stan.powod=p;stan.szczegol=szcz;stan.uwagi=($('an-uwagi').value||'').trim();
  var s=SYT[stan.syt],li=[];
- li.push('Anulujemy całe zamówienie: wszystkie produkty i dostawę.');
- if(s.oplacone)li.push('Zwrócimy <strong>50,00 zł</strong> na konto, z którego zapłacono, najpóźniej w ciągu 14 dni. Zwykle trwa to krócej.');
- else if(s.salon)li.push('Nic nie płacisz. Salon nie będzie na Ciebie czekał z zamówieniem.');
+ li.push('Anulujemy całe zamówienie, razem z dostawą.');
+ if(s.oplacone)li.push('Zwrócimy <strong>50,00 zł</strong> na konto, z którego zapłacono, najpóźniej w ciągu 14 dni.');
+ else if(s.salon)li.push('Nic nie płacisz. Salon nie będzie czekał na Ciebie z zamówieniem.');
  else li.push('Nic nie płacisz. Link do płatności przestanie działać.');
- li.push('Od razu wyślemy Ci e-mail z potwierdzeniem anulowania, datą i godziną.');
- li.push('Anulowania nie da się cofnąć. Jeśli zmienisz zdanie, złóż nowe zamówienie.');
+ li.push('Wyślemy Ci e-mail z potwierdzeniem, datą i godziną anulowania.');
+ li.push('Anulowanego zamówienia nie da się przywrócić. Jeśli zmienisz zdanie, złóż nowe zamówienie.');
  $('an-skutki').innerHTML=li.map(function(t){return '<li>'+t+'</li>';}).join('');
- $('an-powod-txt').textContent=p.t+(szcz?' ('+szcz+')':'');
- $('an-krok1').hidden=true;$('an-krok2').hidden=false;
- $('an-potwierdz').focus();
+ $('an-powod-txt').textContent=r?(p.t+(szcz?' ('+szcz+')':'')):'Nie podano';
+ pokazKrok(2);
+ $('an-panel').focus();
 });
-$('an-zmien').addEventListener('click',function(){$('an-krok2').hidden=true;$('an-krok1').hidden=false;});
+$('an-zmien').addEventListener('click',function(){pokazKrok(1);});
 
 $('an-potwierdz').addEventListener('click',function(){
- var btn=this;btn.disabled=true;btn.textContent='Anulujemy…';
+ var btn=this;btn.classList.add('button--loading');btn.disabled=true;
  setTimeout(function(){
-  btn.disabled=false;btn.textContent='Tak, anuluj zamówienie';
+  btn.classList.remove('button--loading');btn.disabled=false;
   zamknij();
   var s=SYT[stan.syt];
   if(s.wyscig){
    stan.syt='kurier';rysuj();
-   pokazBaner('an-b-err','<strong>Nie udało się anulować zamówienia</strong>Magazyn spakował je przed chwilą i czeka już na kuriera. Jeśli nie chcesz go przyjąć, napisz do nas, podając numer zamówienia. Nic się nie zmieniło w płatności.');
+   baner('alert--warning','fa-triangle-exclamation','<strong>Nie udało się anulować zamówienia</strong><br>Magazyn przed chwilą je spakował i zamówienie czeka na kuriera. Jeśli nie chcesz go przyjąć, napisz do nas i podaj numer zamówienia. Płatność się nie zmieniła.');
    return;
   }
   stan.anulowane=true;stan.kiedy=teraz();rysuj();
-  pokazBaner('an-b-ok','<strong><i class="fa-solid fa-circle-check"></i> Zamówienie nr 1338454 jest anulowane</strong>'+
+  baner('alert--positive','fa-circle-check','<strong>Zamówienie nr 1338454 zostało anulowane</strong><br>'+
    (s.oplacone?'Zwrócimy 50,00 zł na konto, z którego zapłacono, najpóźniej w ciągu 14 dni. ':'Nic nie płacisz. ')+
-   'Potwierdzenie z datą i godziną anulowania wysłaliśmy na Twój adres e-mail.');
+   'Potwierdzenie wysłaliśmy na Twój adres e-mail.');
  },900);
 });
 
-document.addEventListener('click',function(e){
- if(e.target.closest('[data-zamknij]')||e.target.closest('#an-zamknij')){zamknij();}
- if(e.target.id==='an-overlay'){zamknij();}
- var k=e.target.closest('[data-kontakt]');if(k){e.preventDefault();toast('W sklepie ten link otwiera formularz kontaktu z numerem zamówienia.');}
-});
 document.addEventListener('keydown',function(e){
- if($('an-overlay').hidden)return;
- if(e.key==='Escape'){zamknij();}
+ if(!$('an-panel').classList.contains('show'))return;
+ if(e.key==='Escape'){zamknij();return;}
  if(e.key==='Tab'){
-  var f=[].filter.call($('an-overlay').querySelectorAll('button,input,textarea,select'),function(el){return el.offsetParent!==null&&!el.disabled;});
+  var f=[].filter.call($('an-panel').querySelectorAll('button,input,textarea'),function(el){return el.offsetParent!==null&&!el.disabled;});
   if(!f.length)return;var a=f[0],z=f[f.length-1];
   if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}
   else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}
  }
 });
 $('an-anuluj').addEventListener('click',function(){
- if(this.getAttribute('aria-disabled')==='true'){$('an-why').focus&&$('an-why').setAttribute('tabindex','-1');$('an-why').focus();return;}
+ if(this.getAttribute('aria-disabled')==='true'){$('an-why').focus();return;}
  otworz();
 });
 
 var tt;function toast(t){var x=$('an-toast');x.textContent=t;x.hidden=false;clearTimeout(tt);tt=setTimeout(function(){x.hidden=true;},4200);}
 
 function ustaw(syt){stan={syt:syt,anulowane:false,powod:null,szczegol:'',uwagi:'',kiedy:''};$('an-baner').hidden=true;rysuj();}
-$('an-sytuacja').addEventListener('change',function(){ustaw(this.value);try{history.replaceState(null,'','#'+this.value);}catch(e){}});
+$('an-sytuacja').addEventListener('change',function(){ustaw(this.value);});
 $('an-od-nowa').addEventListener('click',function(){ustaw($('an-sytuacja').value);});
 
 var start=(location.hash||'').slice(1);if(SYT[start]){$('an-sytuacja').value=start;}
