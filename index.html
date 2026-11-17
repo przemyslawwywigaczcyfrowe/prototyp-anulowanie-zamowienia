@@ -113,7 +113,9 @@ header a, footer a { pointer-events:none; }
 .an-r-extra{flex-basis:100%;padding-left:42px}
 .an-r-extra:empty{display:none}
 .an-hint{margin:4px 0 10px;line-height:1.45}
-.an-hint-btn{margin-top:10px}
+.an-hint-akcje{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.an-hint-akcje .button{background-color:#fff}
+.an-hint-akcje .button--primary{background-color:var(--color-button-primary)}
 .an-pole{margin:8px 0 10px;position:relative}
 .an-pole .text-input__field{position:relative}
 .an-uwagi{position:relative}
@@ -17999,14 +18001,22 @@ header a, footer a { pointer-events:none; }
 var $=function(id){return document.getElementById(id);};
 var KROKI=['Nowe','W przygotowaniu','W drodze','Odebrane'];
 
+var NIE_MUSISZ='Nie musisz anulować zamówienia. ';
 var POWODY=[
- {id:'cena',t:'W innym sklepie jest taniej',verto:'# Lepsza cena / dostępność w innym sklepie',pole:{id:'an-gdzie',et:'W jakim sklepie i za ile? (opcjonalnie)'}},
- {id:'termin',t:'Za długi czas dostawy',verto:'# Zbyt długi termin realizacji'},
+ {id:'zmiana',t:'Chcę zmienić produkty lub ich liczbę',verto:'# Klient zrezygnował z zakupu',
+   pomoc:function(){return {t:NIE_MUSISZ+'Zadzwoń albo napisz, a zmienimy produkty w tym zamówieniu.',kontakt:true};}},
+ {id:'dostawa',t:'Chcę zmienić adres lub sposób dostawy',tSalon:'Chcę zmienić salon odbioru lub sposób dostawy',verto:'# Klient zrezygnował z zakupu',
+   pomoc:function(s){return {t:NIE_MUSISZ+'Zadzwoń albo napisz, a zmienimy '+(s.salon?'salon odbioru lub sposób dostawy':'adres lub sposób dostawy')+' w tym zamówieniu.',kontakt:true};}},
+ {id:'forma',t:'Chcę zapłacić w inny sposób',verto:'# Klient zmienił formę rozliczenia transakcji',
+   pomoc:function(s){
+    if(s.platnosc==='online'&&!s.oplacone)return {t:NIE_MUSISZ+'Inną metodę płatności online wybierzesz po kliknięciu „Ponów płatność”. Jeśli wolisz raty, leasing albo przelew tradycyjny, zadzwoń albo napisz, a zmienimy formę płatności.',plat:true,kontakt:true};
+    return {t:NIE_MUSISZ+'Zadzwoń albo napisz, a zmienimy formę płatności w tym zamówieniu.',kontakt:true};}},
  {id:'platnosc',t:'Nie udała się płatność online',verto:'# Błąd płatności - Zdublowane / połączone z innym zamówieniem',tylkoOnlineNieoplacone:true,
-   hint:'Możesz zapłacić jeszcze raz, także inną metodą. Zamówienie zostanie.',hintBtn:'Ponów płatność'},
- {id:'forma',t:'Chcę zapłacić w inny sposób',verto:'# Klient zmienił formę rozliczenia transakcji'},
- {id:'zmiana',t:'Chcę zmienić produkty lub ich liczbę',verto:'# Klient zrezygnował z zakupu'},
- {id:'dostawa',t:'Chcę zmienić adres lub sposób dostawy',tSalon:'Chcę zmienić salon odbioru lub sposób dostawy',verto:'# Klient zrezygnował z zakupu'},
+   pomoc:function(){return {t:NIE_MUSISZ+'Możesz zapłacić jeszcze raz, także inną metodą.',plat:true};}},
+ {id:'termin',t:'Za długi czas oczekiwania na zamówienie',verto:'# Zbyt długi termin realizacji',
+   pomoc:function(){return {t:'Zadzwoń albo napisz. Sprawdzimy, czy da się przyspieszyć realizację, albo zaproponujemy podobny produkt dostępny od ręki.',kontakt:true};}},
+ {id:'cena',t:'W innym sklepie jest taniej',verto:'# Lepsza cena / dostępność w innym sklepie',pole:{id:'an-gdzie',et:'W jakim sklepie i za ile? (opcjonalnie)'},
+   pomoc:function(){return {t:'Zadzwoń albo napisz. Sprawdzimy, czy możemy zaproponować lepszą cenę.',kontakt:true};}},
  {id:'dubel',t:'Zamówienie złożone przez pomyłkę lub dwa razy',verto:'# Zdublowane / połączone z innym zamówieniem'},
  {id:'rozmysl',t:'Produkt nie jest mi już potrzebny',verto:'# Klient zrezygnował z zakupu'},
  {id:'inny',t:'Inny powód',verto:'# Klient zrezygnował z zakupu'}
@@ -18159,13 +18169,19 @@ $('an-reasons').addEventListener('change',function(e){
  [].forEach.call(document.querySelectorAll('.an-r-extra'),function(x){x.innerHTML='';});
  [].forEach.call(document.querySelectorAll('.an-r'),function(r){r.classList.toggle('an-sel',r.contains(e.target));});
  var p=powodById(e.target.value),x=$('ex-'+p.id),h='';
- if(p.hint)h+='<div class="cyf-alert alert alert--info an-hint"><div class="alert__icon"><i class="fa-solid fa-circle-info"></i></div><div class="alert__content">'+p.hint+(p.hintBtn?'<div><button type="button" class="button button--medium button--border-neutral-secondary an-hint-btn" data-hint="'+p.id+'">'+p.hintBtn+'</button></div>':'')+'</div></div>';
+ var pm=p.pomoc?p.pomoc(SYT[stan.syt]):null;
+ if(pm){
+  var ak='';
+  if(pm.plat)ak+='<button type="button" class="button button--medium button--primary" data-akcja="plat">Ponów płatność</button>';
+  if(pm.kontakt)ak+='<a class="button button--medium button--border-neutral-secondary" href="tel:583264040"><i class="fa-solid fa-phone"></i>&nbsp;58 326 40 40</a><button type="button" class="button button--medium button--border-neutral-secondary" data-akcja="formularz">Formularz kontaktowy</button>';
+  h+='<div class="cyf-alert alert alert--info an-hint"><div class="alert__icon"><i class="fa-solid fa-circle-info"></i></div><div class="alert__content">'+pm.t+'<div class="an-hint-akcje">'+ak+'</div></div></div>';
+ }
  if(p.pole)h+='<div class="text-input an-pole"><div class="text-input__field"><input type="text" id="'+p.pole.id+'" class="text-input__input" maxlength="200" placeholder=" "><label for="'+p.pole.id+'" class="text-input__label">'+p.pole.et+'</label></div></div>';
  x.innerHTML=h;
 });
 document.addEventListener('click',function(e){
- var b=e.target.closest('[data-hint]');
- if(b){zamknij();toast(b.dataset.hint==='platnosc'?'W sklepie ten przycisk otwiera płatność online. Zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktowy z numerem zamówienia.');return;}
+ var b=e.target.closest('[data-akcja]');
+ if(b){zamknij();toast(b.dataset.akcja==='plat'?'W sklepie ten przycisk otwiera płatność online. Zamówienie zostaje.':'W sklepie ten przycisk otwiera formularz kontaktowy z wpisanym numerem zamówienia.');return;}
  if(e.target.closest('[data-zamknij]')){zamknij();return;}
  if(e.target.id==='an-tlo'){zamknij();return;}
  var k=e.target.closest('[data-kontakt]');if(k){e.preventDefault();toast('W sklepie ten link otwiera formularz kontaktowy z numerem zamówienia.');}
